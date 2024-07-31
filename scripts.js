@@ -4,7 +4,6 @@ let computerScore = 0;
 // Returns "rock", "paper" or "scissors" using a random #
 function getComputerChoice() {
   let choice = Math.floor(Math.random() * 3);
-
   if (choice === 0) {
     return "rock";
   } else if (choice === 1) {
@@ -15,41 +14,77 @@ function getComputerChoice() {
 }
 
 function getHumanChoice() {
-    let choice = prompt("rock(r), paper(p), or scissors(s)");
-    choice = choice.toUpperCase();
-    if (choice === "r" || choice === "rock") {
-      valid = true;
-      return "rock";
-    } else if (choice === "p" || choice === "paper") {
-      valid = true;
-      return "paper";
-    } else if (choice === "s" || choice === "scissors") {
-      valid = true;
-      return "scissors";
-    } else return "not valid"
+  let choice = prompt("rock(r), paper(p), or scissors(s)");
+  choice = choice.toLowerCase();
+  if (choice === "r" || choice === "rock") {
+    return "rock";
+  } else if (choice === "p" || choice === "paper") {
+    return "paper";
+  } else if (choice === "s" || choice === "scissors") {
+    return "scissors";
+  } else return "not valid";
 }
 
 function playRound(humanChoice, computerChoice) {
-  switch (true) {
-    case computerChoice == "rock" && humanChoice == "paper":
-      humanChoice++;
-      return "You win!";
-    case humanChoice == "rock" && computerScore == "paper":
+  humanChoice = humanChoice.toLowerCase();
+
+  endOfRound = false;
+
+  switch (!endOfRound) {
+    // cases for human win
+    case humanChoice === "paper" && computerChoice == "rock":
+      endOfRound = true;
+      humanScore++;
+      return "You win! " + humanChoice + " beats " + computerChoice + ".";
+
+    case humanChoice === "scissors" && computerChoice == "paper":
+      endOfRound = true;
+      humanScore++;
+      return "You win! " + humanChoice + " beats " + computerChoice + ".";
+
+    case humanChoice === "rock" && computerChoice == "scissors":
+      endOfRound = true;
+      humanScore++;
+      return "You win! " + humanChoice + " beats " + computerChoice + ".";
+
+    // cases for computer win
+    case computerChoice === "paper" && humanChoice == "rock":
+      endOfRound = true;
       computerScore++;
-      return "You lose!";
-    case computerScore == "rock" && humanChoice == "scissors":
+      return "You lose! " + computerChoice + " beats " + humanChoice + ".";
+
+    case computerChoice === "scissors" && humanChoice == "paper":
+      endOfRound = true;
       computerScore++;
-      return "You lose!";
-    case humanChoice == "rock" && computerScore == "scissors":
-      humanChoice++;
-      return "You win!";
-    case computerScore == "scissors" && humanChoice == "paper":
+      return "You lose! " + computerChoice + " beats " + humanChoice + ".";
+
+    case computerChoice === "rock" && humanChoice == "scissors":
+      endOfRound = true;
       computerScore++;
-      return "You lose!";
-    case humanChoice == "scissors" && computerScore == "paper":
-      computerScore++;
-      return "You win!";
+      return "You lose! " + computerChoice + " beats " + humanChoice + ".";
+
     default:
-      return "Tie!";
+      endOfRound = true;
+      return "Tie";
   }
 }
+
+function playGame() {
+  let rounds = prompt("How many rounds do you wish to play?");
+
+  for (let i = 1; i <= rounds; i++) {
+    console.log("Round " + i);
+    let humanSelection = getHumanChoice();
+    
+
+    let computerSelection = getComputerChoice();
+    console.log(playRound(humanSelection, computerSelection));
+    console.log("Score: " + humanScore + "\nComputers Score: " + computerScore);
+  }
+
+  if (computerScore > humanScore) return console.log("The computer won. :(");
+  else if (humanScore > computerScore) return console.log("You won! :)");
+  else return console.log("You've tied");
+}
+
+playGame();
